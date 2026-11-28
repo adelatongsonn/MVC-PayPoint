@@ -216,24 +216,26 @@
         }
 
         .pos-thumb {
-            width: 56px;
-            height: 56px;
-            object-fit: cover;
+            width: 72px;
+            height: 72px;
+            display: block;
+            object-fit: contain;
+            object-position: center;
             border-radius: 0.6rem;
             border: 1px solid var(--tamaraw-border);
             background-color: #F5F5F5;
         }
 
         .pos-thumb-empty {
-            width: 56px;
-            height: 56px;
+            width: 72px;
+            height: 72px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 0.6rem;
             background-color: var(--tamaraw-pale-green);
             color: var(--tamaraw-emerald);
             border: 1px solid #D1FAE5;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
             font-size: 1.25rem;
         }
 
@@ -320,11 +322,13 @@
         /* Primary add button */
         .prod-btn-primary {
             height: 38px;
+            min-width: 140px;
             padding: 0 1.1rem;
             border-radius: 6px;
             font-size: 0.875rem;
             display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 0.3rem;
         }
 
@@ -471,6 +475,12 @@
             background-color: #FEF2F2;
             color: #7F1D1D;
             border-color: #FCA5A5;
+        }
+
+        .prod-product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         /* ── Empty state ── */
@@ -706,41 +716,147 @@
             align-items: center;
             gap: 0.3rem;
         }
+
+        .staff-avatar {
+            width: 56px;
+            height: 56px;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid #9bd7c0;
+            border-radius: 8px;
+            background: #effaf5;
+            color: #087f5b;
+        }
+
+        .staff-avatar img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+        }
+
+        .logout-modal {
+            border: 1px solid var(--tamaraw-border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 45px rgba(15, 23, 42, 0.2);
+        }
+
+        .logout-modal-icon {
+            width: 58px;
+            height: 58px;
+            margin: 12px auto 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #fff7df;
+            color: #9a7615;
+            font-size: 1.5rem;
+        }
+
+        .logout-modal-title {
+            color: var(--tamaraw-slate);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .logout-modal-text {
+            color: var(--tamaraw-muted);
+            font-size: 0.95rem;
+        }
+
+        .logout-cancel-button,
+        .logout-confirm-button {
+            min-width: 120px;
+            border-radius: 7px;
+            font-weight: 600;
+        }
+
+        .logout-cancel-button {
+            border: 1px solid var(--tamaraw-border);
+            color: var(--tamaraw-muted);
+        }
+
+        .logout-cancel-button:hover {
+            background-color: #f3f6f5;
+        }
     </style>
 </head>
 <body>
     @php
         $currentUser = auth()->user();
+
         $initials = collect(explode(' ', trim($currentUser->full_name)))
             ->filter()
             ->take(2)
             ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
             ->implode('');
-        $hasAvatar = $currentUser->avatar && file_exists(public_path('storage/' . $currentUser->avatar));
+
+        $hasAvatar = $currentUser->avatar &&
+            file_exists(public_path('storage/' . $currentUser->avatar));
 
         $navSections = [
             'Overview' => [
-                ['route' => 'dashboard', 'pattern' => 'dashboard', 'icon' => 'bi-grid-1x2-fill', 'label' => 'Dashboard'],
+                [
+                    'route' => 'dashboard',
+                    'pattern' => 'dashboard',
+                    'icon' => 'bi-grid-1x2-fill',
+                    'label' => 'Dashboard',
+                ],
             ],
+
             'Transactions' => [
-                ['route' => 'sales.create', 'pattern' => 'sales.create', 'icon' => 'bi-cart-plus', 'label' => 'Record Sale'],
-                ['route' => 'sales.index', 'pattern' => 'sales.index', 'icon' => 'bi-receipt', 'label' => 'Sales History'],
+                [
+                    'route' => 'sales.create',
+                    'pattern' => 'sales.create',
+                    'icon' => 'bi-cart-plus',
+                    'label' => 'Record Sale',
+                ],
+                [
+                    'route' => 'sales.index',
+                    'pattern' => 'sales.index',
+                    'icon' => 'bi-receipt',
+                    'label' => 'Sales History',
+                ],
             ],
+
             'Management' => [
-                ['route' => 'products.index', 'pattern' => 'products.*', 'icon' => 'bi-box-seam', 'label' => 'Products'],
-                ['route' => 'customers.index', 'pattern' => 'customers.*', 'icon' => 'bi-people', 'label' => 'Customers'],
-                ['route' => 'staff.index', 'pattern' => 'staff.*', 'icon' => 'bi-person-badge', 'label' => 'Staff'],
+                [
+                    'route' => 'products.index',
+                    'pattern' => 'products.*',
+                    'icon' => 'bi-box-seam',
+                    'label' => 'Products',
+                ],
+                [
+                    'route' => 'customers.index',
+                    'pattern' => 'customers.*',
+                    'icon' => 'bi-people',
+                    'label' => 'Customers',
+                ],
+                [
+                    'route' => 'staff.index',
+                    'pattern' => 'staff.*',
+                    'icon' => 'bi-person-badge',
+                    'label' => 'Staff',
+                ],
             ],
         ];
     @endphp
 
     <div class="d-flex app-shell">
+
         {{-- Desktop Sidebar --}}
         <aside class="sidebar d-none d-lg-flex flex-column">
+
             <div class="sidebar-brand p-3 d-flex align-items-center gap-3">
                 <span class="brand-mark">
                     <i class="bi bi-shop"></i>
                 </span>
+
                 <div>
                     <div class="fw-bold fs-6 lh-sm">PayPoint</div>
                     <small class="text-white-50">POS Management</small>
@@ -749,7 +865,10 @@
 
             <div class="p-3 flex-grow-1">
                 @foreach ($navSections as $sectionLabel => $items)
-                    <div class="sidebar-section-label {{ !$loop->first ? 'mt-2' : '' }}">{{ $sectionLabel }}</div>
+                    <div class="sidebar-section-label {{ !$loop->first ? 'mt-2' : '' }}">
+                        {{ $sectionLabel }}
+                    </div>
+
                     <ul class="nav flex-column gap-1">
                         @foreach ($items as $item)
                             <li class="nav-item">
@@ -766,49 +885,88 @@
                 @endforeach
             </div>
 
+            {{-- Desktop User Footer --}}
             <div class="sidebar-footer p-3">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <span class="avatar-circle">
                         @if ($hasAvatar)
-                            <img src="{{ asset('storage/' . $currentUser->avatar) }}" alt="{{ $currentUser->full_name }}">
+                            <img
+                                src="{{ asset('storage/' . $currentUser->avatar) }}"
+                                alt="{{ $currentUser->full_name }}"
+                            >
                         @else
                             {{ $initials ?: 'U' }}
                         @endif
                     </span>
+
                     <div class="overflow-hidden">
-                        <div class="fw-semibold text-truncate small">{{ $currentUser->full_name }}</div>
-                        <div class="text-white-50 text-truncate" style="font-size: 0.75rem;">{{ '@' . $currentUser->username }}</div>
+                        <div class="fw-semibold text-truncate small">
+                            {{ $currentUser->full_name }}
+                        </div>
+
+                        <div
+                            class="text-white-50 text-truncate"
+                            style="font-size: 0.75rem;"
+                        >
+                            {{ '@' . $currentUser->username }}
+                        </div>
                     </div>
                 </div>
 
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button type="submit" class="btn btn-gold btn-sm w-100">
-                        <i class="bi bi-box-arrow-right me-1"></i> Logout
-                    </button>
-                </form>
+                <button
+                    type="button"
+                    class="btn btn-gold btn-sm w-100"
+                    data-bs-toggle="modal"
+                    data-bs-target="#logoutModal"
+                >
+                    <i class="bi bi-box-arrow-right me-1"></i>
+                    Logout
+                </button>
             </div>
         </aside>
 
-        {{-- Mobile Offcanvas Sidebar --}}
-        <div class="offcanvas offcanvas-start sidebar d-lg-none" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel">
+        {{-- Mobile Sidebar --}}
+        <div
+            class="offcanvas offcanvas-start sidebar d-lg-none"
+            tabindex="-1"
+            id="mobileSidebar"
+            aria-labelledby="mobileSidebarLabel"
+        >
             <div class="offcanvas-header sidebar-brand">
-                <div class="d-flex align-items-center gap-3" id="mobileSidebarLabel">
+                <div
+                    class="d-flex align-items-center gap-3"
+                    id="mobileSidebarLabel"
+                >
                     <span class="brand-mark">
                         <i class="bi bi-shop"></i>
                     </span>
+
                     <div>
-                        <div class="fw-bold fs-6 lh-sm text-white">PayPoint</div>
-                        <small class="text-white-50">POS Management</small>
+                        <div class="fw-bold fs-6 lh-sm text-white">
+                            PayPoint
+                        </div>
+
+                        <small class="text-white-50">
+                            POS Management
+                        </small>
                     </div>
                 </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                ></button>
             </div>
 
             <div class="offcanvas-body d-flex flex-column p-3">
                 <div class="flex-grow-1">
                     @foreach ($navSections as $sectionLabel => $items)
-                        <div class="sidebar-section-label {{ !$loop->first ? 'mt-2' : '' }}">{{ $sectionLabel }}</div>
+                        <div class="sidebar-section-label {{ !$loop->first ? 'mt-2' : '' }}">
+                            {{ $sectionLabel }}
+                        </div>
+
                         <ul class="nav flex-column gap-1">
                             @foreach ($items as $item)
                                 <li class="nav-item">
@@ -825,35 +983,53 @@
                     @endforeach
                 </div>
 
+                {{-- Mobile User Footer --}}
                 <div class="sidebar-footer p-3 rounded mt-3">
                     <div class="d-flex align-items-center gap-2 mb-3">
                         <span class="avatar-circle">
                             @if ($hasAvatar)
-                                <img src="{{ asset('storage/' . $currentUser->avatar) }}" alt="{{ $currentUser->full_name }}">
+                                <img
+                                    src="{{ asset('storage/' . $currentUser->avatar) }}"
+                                    alt="{{ $currentUser->full_name }}"
+                                >
                             @else
                                 {{ $initials ?: 'U' }}
                             @endif
                         </span>
+
                         <div class="overflow-hidden">
-                            <div class="fw-semibold text-truncate small text-white">{{ $currentUser->full_name }}</div>
-                            <div class="text-white-50 text-truncate" style="font-size: 0.75rem;">{{ '@' . $currentUser->username }}</div>
+                            <div class="fw-semibold text-truncate small text-white">
+                                {{ $currentUser->full_name }}
+                            </div>
+
+                            <div
+                                class="text-white-50 text-truncate"
+                                style="font-size: 0.75rem;"
+                            >
+                                {{ '@' . $currentUser->username }}
+                            </div>
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
-                        <button type="submit" class="btn btn-gold btn-sm w-100">
-                            <i class="bi bi-box-arrow-right me-1"></i> Logout
-                        </button>
-                    </form>
+                    <button
+                        type="button"
+                        class="btn btn-gold btn-sm w-100"
+                        data-bs-toggle="modal"
+                        data-bs-target="#logoutModal"
+                    >
+                        <i class="bi bi-box-arrow-right me-1"></i>
+                        Logout
+                    </button>
                 </div>
             </div>
         </div>
 
         {{-- Main Workspace --}}
         <div class="flex-grow-1 d-flex flex-column min-w-0">
+
             <header class="topbar px-4 py-3 d-flex align-items-center justify-content-between gap-3">
                 <div class="d-flex align-items-center gap-3">
+
                     <button
                         class="btn btn-outline-emerald btn-sm d-lg-none"
                         type="button"
@@ -863,9 +1039,15 @@
                     >
                         <i class="bi bi-list fs-5"></i>
                     </button>
+
                     <div>
-                        <h1 class="h5 mb-0 fw-bold">@yield('page_title', 'POS Dashboard')</h1>
-                        <small class="text-muted-slate">@yield('page_subtitle', 'PayPoint Control Center')</small>
+                        <h1 class="h5 mb-0 fw-bold">
+                            @yield('page_title', 'POS Dashboard')
+                        </h1>
+
+                        <small class="text-muted-slate">
+                            @yield('page_subtitle', 'PayPoint Control Center')
+                        </small>
                     </div>
                 </div>
 
@@ -877,27 +1059,114 @@
                 </div>
             </header>
 
-            <main class="p-4 container-fluid" style="max-width: 1200px;">
+            <main
+                class="p-4 container-fluid"
+                style="max-width: 1200px;"
+            >
                 @if (session('success'))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <div
+                        class="alert alert-success alert-dismissible fade show"
+                        role="alert"
+                    >
                         {{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"
+                        ></button>
                     </div>
                 @endif
 
                 @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <div
+                        class="alert alert-danger alert-dismissible fade show"
+                        role="alert"
+                    >
                         <ul class="mb-0 ps-3">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"
+                        ></button>
                     </div>
                 @endif
 
                 @yield('content')
             </main>
+        </div>
+    </div>
+
+    {{-- Logout Confirmation Modal --}}
+    <div
+        class="modal fade"
+        id="logoutModal"
+        tabindex="-1"
+        aria-labelledby="logoutModalLabel"
+        aria-hidden="true"
+    >
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content logout-modal">
+
+                <div class="modal-header border-0">
+                    <div class="logout-modal-icon">
+                        <i class="bi bi-box-arrow-right"></i>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                    ></button>
+                </div>
+
+                <div class="modal-body text-center px-4 pb-4">
+                    <h5
+                        class="logout-modal-title"
+                        id="logoutModalLabel"
+                    >
+                        Log out of PayPoint?
+                    </h5>
+
+                    <p class="logout-modal-text mb-0">
+                        Are you sure you want to end your current staff session?
+                    </p>
+                </div>
+
+                <div class="modal-footer border-0 justify-content-center gap-2 pb-4">
+                    <button
+                        type="button"
+                        class="btn btn-light logout-cancel-button"
+                        data-bs-dismiss="modal"
+                    >
+                        Cancel
+                    </button>
+
+                    <form
+                        method="POST"
+                        action="{{ route('logout') }}"
+                    >
+                        @csrf
+
+                        <button
+                            type="submit"
+                            class="btn btn-gold logout-confirm-button"
+                        >
+                            <i class="bi bi-check-lg me-1"></i>
+                            Yes, Log Out
+                        </button>
+                    </form>
+                </div>
+
+            </div>
         </div>
     </div>
 

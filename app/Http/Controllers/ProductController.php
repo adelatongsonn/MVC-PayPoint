@@ -70,13 +70,22 @@ class ProductController extends Controller
                 return $product;
             }
 
+            $nextProductId = ((int) Product::withTrashed()->max('id')) + 1;
+
             $product = Product::create(array_merge($data, [
-                'sku' => 'PRD-'.Str::ulid(),
+                'sku' => 'PRD-' . str_pad(
+                    (string) $nextProductId,
+                    6,
+                    '0',
+                    STR_PAD_LEFT
+                ),
             ]));
 
             if ($request->hasFile('image')) {
                 $product->update([
-                    'image' => $request->file('image')->store('products', 'public'),
+                    'image' => $request
+                        ->file('image')
+                        ->store('products', 'public'),
                 ]);
             }
 

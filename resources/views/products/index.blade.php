@@ -46,7 +46,7 @@
                 <thead>
                     <tr>
                         <th style="width: 80px; padding-left: 1.25rem;">Image</th>
-                        <th>Product ID</th>
+                        <th class="text-nowrap">Product ID</th>
                         <th>Product Name</th>
                         <th>Price</th>
                         <th>Stock</th>
@@ -61,8 +61,7 @@
                                     <img
                                         src="{{ asset('storage/' . $product->image) }}"
                                         alt="{{ $product->name }}"
-                                        class="pos-thumb"
-                                        onerror="this.outerHTML='<span class=\'pos-thumb-empty\' title=\'Image unavailable\'><i class=\'bi bi-image\'></i></span>'"
+                                        class="prod-product-image"
                                     >
                                 @else
                                     <span class="pos-thumb-empty" title="No image">
@@ -70,7 +69,7 @@
                                     </span>
                                 @endif
                             </td>
-                            <td>
+                            <td class="text-nowrap">
                                 <span>{{ $product->sku }}</span>
                             </td>
                             <td>
