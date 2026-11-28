@@ -15,6 +15,11 @@ class Customer extends Model
         'phone',
     ];
 
+    public function getCustomerCodeAttribute(): string
+    {
+        return 'CUS-'.str_pad((string) $this->getKey(), 6, '0', STR_PAD_LEFT);
+    }
+
     public function sales()
     {
         return $this->hasMany(Sale::class);
